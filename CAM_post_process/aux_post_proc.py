@@ -94,23 +94,23 @@ def calc_lts_eis(merged_file,output_path,sim,overwrite):
   #nothing else needed from this file
   data.close()
 
-  lts_file = output_path / (sim + ".cam.h0.merged_0001_0060_lts.nc")
-  eis_file = output_path / (sim + ".cam.h0.merged_0001_0060_eis.nc")
+  lts_file = output_path / (sim + ".cam.h0.merged_0031_0060_lts.nc")
+  eis_file = output_path / (sim + ".cam.h0.merged_0031_0060_eis.nc")
 
   #------LTS-------
   if not lts_file.exists() or overwrite:
     print('  * Calculating LTS... *')
 
     #potential temperature at 700 hPa
-    pt_file = output_path / (sim + ".cam.h0.merged_0001_0060_pt700.tmp.nc")
+    pt_file = output_path / (sim + ".cam.h0.merged_0031_0060_pt700.tmp.nc")
     cdo.select("name=PT700",input="-sellevidx,%02d -expr,\'PT700=(T*(1000/%f)^0.286)\' "%(ilev+1,plev)+str(merged_file), output=str(pt_file))
 
     #potential temperature of surface
-    pts_file = output_path / (sim + ".cam.h0.merged_0001_0060_ptsurf.tmp.nc")
+    pts_file = output_path / (sim + ".cam.h0.merged_0031_0060_ptsurf.tmp.nc")
     cdo.select("name=PTS",input=" -expr,\'PTS=(TS*(1e5/PS)^0.286)\' "+str(merged_file), output=str(pts_file))
 
     #merged the two PT files
-    merge_pt = output_path / (sim + ".cam.h0.merged_0001_0060_ptmrg.tmp.nc")
+    merge_pt = output_path / (sim + ".cam.h0.merged_0031_0060_ptmrg.tmp.nc")
     cdo.merge(input=str(pt_file)+" "+str(pts_file),output=str(merge_pt))
 
     #LTS calculation
@@ -123,7 +123,7 @@ def calc_lts_eis(merged_file,output_path,sim,overwrite):
     print('  * Now z700...        *')
 
     #some file manipulation gymnastics to get CDO to do what I want 
-    z700_file = output_path / (sim + ".cam.h0.merged_0001_0060_z700.tmp.nc")
+    z700_file = output_path / (sim + ".cam.h0.merged_0031_0060_z700.tmp.nc")
     cdo.select("name=Z700",input="-sellevidx,%02d -expr,\'Z700=(Z3)\' "%(ilev+1)+str(merged_file), output=str(z700_file))
     data_z700 = nc.Dataset(str(z700_file),'r+')
     data_z700['lev'][:] = data_lts['lev'][:]
@@ -133,7 +133,7 @@ def calc_lts_eis(merged_file,output_path,sim,overwrite):
     print('  * Now LCL...         *')
 
     #LCL from Lawrence 2005 and some file manipulation
-    lcl_file = output_path / (sim + ".cam.h0.merged_0001_0060_lcl.tmp.nc")
+    lcl_file = output_path / (sim + ".cam.h0.merged_0031_0060_lcl.tmp.nc")
     cdo.select("name=LCL",input="-sellevidx,30 -expr,\'LCL=((20+(TS-273.15)/5)*(100-RELHUM))\' "+str(merged_file), output=str(lcl_file))
     data_lcl = nc.Dataset(str(lcl_file),'r+')
     data_lcl['lev'][:] = data_lts['lev'][:]
@@ -143,31 +143,31 @@ def calc_lts_eis(merged_file,output_path,sim,overwrite):
     print('  * Now Gamma850...    *')
 
     #saturation mixing ratio at 850 hPa
-    smr850_file = output_path / (sim + ".cam.h0.merged_0001_0060_smr850.tmp.nc")
+    smr850_file = output_path / (sim + ".cam.h0.merged_0031_0060_smr850.tmp.nc")
     cdo.select("name=SMR850",input="-sellevidx,%02d -expr,\'SMR850=(100*Q/RELHUM)\' "%(ilev850+1)+str(merged_file), output=str(smr850_file))
 
     #get surface temperature in usable format
-    ts_file = output_path / (sim+".cam.h0.merged_0001_0060_ts.tmp.nc")
+    ts_file = output_path / (sim+".cam.h0.merged_0031_0060_ts.tmp.nc")
     cdo.select("name=TS",input=str(merged_file), output=str(ts_file))
 
     #same for temperature at 700 hPa
-    t700_file = output_path / (sim+".cam.h0.merged_0001_0060_t700.tmp.nc")
+    t700_file = output_path / (sim+".cam.h0.merged_0031_0060_t700.tmp.nc")
     cdo.select("name=T700",input="-sellevidx,%02d -expr,\'T700=(T)\' "%(ilev+1)+str(merged_file), output=str(t700_file))
 
     #merge the temperature files
-    merge_t = output_path / (sim + ".cam.h0.merged_0001_0060_tmrg.tmp.nc")
+    merge_t = output_path / (sim + ".cam.h0.merged_0031_0060_tmrg.tmp.nc")
     cdo.merge(input=str(ts_file)+" "+str(t700_file),output=str(merge_t))
 
     #calculate temperature at 850 hPa
-    t850_file = output_path / (sim + ".cam.h0.merged_0001_0060_t850.tmp.nc")
+    t850_file = output_path / (sim + ".cam.h0.merged_0031_0060_t850.tmp.nc")
     cdo.select("name=T850",input="-expr,\'T850=(0.5*(TS+T700))\' "+str(merge_t), output=str(t850_file))
 
     #merge sat. mixing ratio and temperature files
-    merge_850 = output_path / (sim + ".cam.h0.merged_0001_0060_850.tmp.nc")
+    merge_850 = output_path / (sim + ".cam.h0.merged_0031_0060_850.tmp.nc")
     cdo.merge(input=str(smr850_file)+" "+str(t850_file),output=str(merge_850))
 
     #calculate moist lapse rate at 850 hPa and some file manipulation
-    g850_file = output_path / (sim + ".cam.h0.merged_0001_0060_g850.tmp.nc")
+    g850_file = output_path / (sim + ".cam.h0.merged_0031_0060_g850.tmp.nc")
     cdo.select("name=Gamma850",input="-expr,\'Gamma850=( (%f/%f) * (1-(1+%f*SMR850/(%f*T850)) / (1+%f^2*SMR850/(%f*%f*T850^2))))\' "
                 %(g,cp,Lv,Rd,Lv,cp,Rv)+str(merge_850),output=str(g850_file))
     data_g850 = nc.Dataset(str(g850_file),'r+')
@@ -175,7 +175,7 @@ def calc_lts_eis(merged_file,output_path,sim,overwrite):
     data_g850.close()
 
     #merge LTS, z700, LCL, lapse rate files
-    fin_merge = output_path / (sim + ".cam.h0.merged_0001_0060_eismrg.tmp.nc")
+    fin_merge = output_path / (sim + ".cam.h0.merged_0031_0060_eismrg.tmp.nc")
     cdo.merge(input=str(lts_file)+" "+str(z700_file)+" "+str(lcl_file)+" "+str(g850_file),output=str(fin_merge))
 
     print('  * And finally EIS....*')

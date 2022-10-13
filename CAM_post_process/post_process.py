@@ -42,7 +42,7 @@ for sim in sim_list:
    if not merged_file.exists():
      raise IOError('File %s not found!'%(str(merged_file)))
 
-   print("Simulation '%s'"%str(sim))
+   print("\nSimulation '%s'"%str(sim))
    print('Processing data from %s...'%str(merged_file))
    #post-processed data will go here
    output_path = pathlib.Path(sim)
@@ -126,6 +126,19 @@ for sim in sim_list:
    #Uses LCL definition from Lawrence 2005 (BAMS, 86, p255)
    #The process is gross so I put it in the aux_post_proc library
    app.calc_lts_eis(merged_file,output_path,sim,overwrite)
+
+   #now, do the time averages
+   output_merged_lts = output_path / (sim + '.cam.h0.merged_%04d_%04d_lts.nc'%(start_year,end_year))
+   output_timmean_lts = output_path / (sim + '.cam.h0.timmean_%04d_%04d_lts.nc'%(start_year,end_year))
+   if not output_timmean_lts.exists() or overwrite:
+     print('\n  Averaging LTS...')
+     cdo.timmean(input=str(output_merged_lts),output=str(output_timmean_lts))
+
+   output_merged_eis = output_path / (sim + '.cam.h0.merged_%04d_%04d_eis.nc'%(start_year,end_year))
+   output_timmean_eis = output_path / (sim + '.cam.h0.timmean_%04d_%04d_eis.nc'%(start_year,end_year))
+   if not output_timmean_eis.exists() or overwrite:
+     print('  Averaging EIS...')
+     cdo.timmean(input=str(output_merged_eis),output=str(output_timmean_eis))
    #------------------------------------------------------------------------------------------------
 
 
