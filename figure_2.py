@@ -10,32 +10,31 @@ import matplotlib.gridspec as gridspec
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-simnames =["o3_pre_goe_test",
-           "O3_during_goe_test",
-           "o3_after_goe_test",
-           "o3_proto1_test",
-           "o3_proto2_test",
-           "o3_pal_avg_test",
-#           "bps_control_1.0",
-           "o3_pre_goe_hiCO2",
-           "o3_during_goe_hiCO2",
-           "o3_after_goe_hiCO2",
-           "o3_proto1_hiCO2",
-           "o3_proto2_test",
-           "o3_pal_avg_test"]
-o2_title = ['Pre-GOE           ',
-            'Start of GOE      ',
-            'After GOE         ',
-            'Proterozoic 1     ',
-            'Proterozoic 2     ',
-            'PAL (constant O3) ',
+simnames =["const_CO2_O2_1e-9",
+           "const_CO2_O2_1e-7",
+           "const_CO2_O2_1e-4",
+           "const_CO2_O2_1e-3",
+           "const_CO2_O2_1e-2",
+           "ref_const_O3",
+           "temp_cont_O2_1e-9",
+           "temp_cont_O2_1e-7",
+           "temp_cont_O2_1e-4",
+           "temp_cont_O2_1e-3",
+           "const_CO2_O2_1e-2",
+           "ref_const_O3"]
+#o2_title = ['Pre-GOE           ',
+#            'Start of GOE      ',
+#            'After GOE         ',
+#            'Proterozoic 1     ',
+#            'Proterozoic 2     ',
+#            'PAL (constant O3) ',
 #            'PAL (variable O3) ',
-            'Start GOE (hiCO2) ']
+#            'Start GOE (hiCO2) ']
 #fields = ['TS','LWCF','SWCF','CLDTOT','CLDHGH','CLDMED','CLDLOW','TGCLDCWP']
 
 Ts = np.zeros(len(simnames))
 o3col = np.zeros(len(simnames))
-o2s = np.array([4.5545e-9,6.059e-8,7.255e-5,9.082e-4,9.941e-3,0.2112,4.5545e-9,6.059e-8,7.255e-5,9.082e-4,9.941e-3,0.2112]) #,1.553e-6])
+o2s = np.array([4.5545e-9,6.059e-8,7.255e-5,9.082e-4,9.941e-3,0.2112,4.5545e-9,6.059e-8,7.255e-5,9.082e-4,9.941e-3,0.2112])
 rh500 = np.zeros(len(simnames))
 q500 = np.zeros(len(simnames))
 q20 = np.zeros(len(simnames))
@@ -73,7 +72,7 @@ g = 9.80665
 for i in np.arange(len(simnames)):
   print(simnames[i])
 
-  simpath = simnames[i] + "/merged_hist"
+  simpath = "CAM_post_process/" + simnames[i]
   file = simpath + "/" + simnames[i] + ".cam.h0.globmean_0031_0060.nc"
 
   data = nc.Dataset(file,'r')
@@ -98,7 +97,7 @@ for i in np.arange(len(simnames)):
   cldlow[i] = data['CLDLOW'][:].squeeze()
   cldmed[i] = data['CLDMED'][:].squeeze()
   cldhgh[i] = data['CLDHGH'][:].squeeze()
-  cwp[i] = data['TGCLDCWP'][:].squeeze()
+#  cwp[i] = data['TGCLDCWP'][:].squeeze()
   lwcf[i] = data['LWCF'][:].squeeze()
   swcf[i] = data['SWCF'][:].squeeze()
   icwp[i] = data['TGCLDIWP'][:].squeeze()
@@ -175,143 +174,6 @@ for i in np.arange(len(simnames)):
   #pdb.set_trace()
 
   eis_frac[i] = np.sum(((1-landfrac)*np.cos(lats[:,None]*np.pi/180))[eis_arr>0])/np.sum((1-landfrac)*np.cos(lats[:,None]*np.pi/180))
-
-do = 0
-if do:
-  fig, axes = plt.subplots(ncols=2,nrows=2,figsize=(7.5,5))
-
-  axes[0,0].plot(o2s[:-1],Ts[:-1],color='k',marker='.',linestyle='-')
-  axes[0,0].plot(o2s[-1],Ts[-1],color='k',marker='s',linestyle='-')
-  axes[0,0].set(xscale='log',ylabel='Surface temperature (K)')
-
-  axes[0,1].plot(o2s[:-1],q500[:-1],color='k',marker='.',linestyle='-')
-  axes[0,1].plot(o2s[-1],q500[-1],color='k',marker='s',linestyle='-')
-  #axes[0,1].plot(o2s,q20)
-  axes[0,1].set(xscale='log',ylabel='Specific Humidity (kg kg$^{-1}$)',title='500 hPa')
-
-  #axtwin = axes[0,1].twinx()
-  #axtwin.plot(o2s,rh500,marker='.',linestyle='-',color='r')
-  #axtwin.set_ylabel('Relative humidity (%)',color='r')
-  #axtwin.tick_params(axis='y',labelcolor='r')
-
-  axes[1,0].plot(o2s[:-1],o3col[:-1],color='k',marker='.',linestyle='-')
-  axes[1,0].plot(o2s[-1],o3col[-1],color='k',marker='s',linestyle='-')
-  axes[1,0].set(xscale='log',yscale='log',xlabel='Nominal O$_2$ mixing ratio (mol mol$^{-1}$)',ylabel='Total ozone column (kg m$^{-2}$)')
-
-  axes[1,1].plot(o2s[:-1],q20[:-1],color='k',marker='.',linestyle='-')
-  axes[1,1].plot(o2s[-1],q20[-1],color='k',marker='s',linestyle='-')
-  axes[1,1].set(xscale='log',yscale='log',xlabel='Nominal O$_2$ mixing ratio (mol mol$^{-1}$)',ylabel='Specfic Humidity (kg kg$^{-1}$)',title='20 hPa')
-
-  plt.tight_layout()
-  plt.savefig('glob_mean_Ts_q.pdf')
-  plt.close()
-
-  print(o3col)
-
-
-do = 0
-if do:
-  fig, axes = plt.subplots(ncols=2,nrows=4,figsize=(7.5,8.5))
-
-  axes[0,0].plot(o2s[:-1],cldhgh[:-1],color='k',marker='.',linestyle='-')
-  axes[0,0].plot(o2s[-1],cldhgh[-1],color='k',marker='s',linestyle='-')
-  axes[0,0].set(xscale='log',ylabel='High cloud fraction')
-
-  axes[1,0].plot(o2s[:-1],cldmed[:-1],marker='.',linestyle='-',color='k')
-  axes[1,0].plot(o2s[-1],cldmed[-1],marker='s',linestyle='-',color='k')
-  axes[1,0].set(xscale='log',ylabel='Mid cloud fraction')
-
-  axes[2,0].plot(o2s[:-1],cldlow[:-1],marker='.',linestyle='-',color='k')
-  axes[2,0].plot(o2s[-1],cldlow[-1],marker='s',linestyle='-',color='k')
-  axes[2,0].set(xscale='log',ylabel='Low cloud fraction')
-
-  axes[1,1].plot(o2s[:-1],cwp[:-1],color='k',marker='.',linestyle='-')
-  axes[1,1].plot(o2s[-1],cwp[-1],color='k',marker='s',linestyle='-')
-  #axes[0,1].plot(o2s,q20)
-  axes[1,1].set(xscale='log',ylabel='Total cloud water path\n(kg m$^{-2}$)')
-
-  axes[2,1].plot(o2s[:-1],swcf[:-1],color='k',marker='.',linestyle='-')
-  axes[2,1].plot(o2s[-1],swcf[-1],color='k',marker='s',linestyle='-')
-  axes[2,1].set(xscale='log',ylabel='SW cloud forcing\n(W m$^{-2}$)')
-
-  axes[0,1].plot(o2s[:-1],lwcf[:-1],color='k',marker='.',linestyle='-')
-  axes[0,1].plot(o2s[-1],lwcf[-1],color='k',marker='s',linestyle='-')
-  axes[0,1].set(xscale='log',ylabel='LW cloud forcing\n(W m$^{-2}$)')
-
-  axes[3,0].plot(o2s[:-1],icldt[:-1],color='k',marker='.',linestyle='-')
-  axes[3,0].plot(o2s[-1],icldt[-1],color='k',marker='s',linestyle='-')
-  #axes[3,0].plot(o2s,lcldt,marker='.',linestyle='-')
-  #axes[3,0].plot(o2s,tcldt,marker='.',linestyle='-')
-  axes[3,0].set(xscale='log',xlabel='Nominal O$_2$ mixing ratio (mol mol$^{-1}$)',ylabel='Ice cloud top\ntemperature (K)')
-
-  axes[3,1].plot(o2s[:-1],rh500[:-1],color='k',marker='.',linestyle='-')
-  axes[3,1].plot(o2s[-1],rh500[-1],color='k',marker='s',linestyle='-')
-  axes[3,1].set(xscale='log',xlabel='Nominal O$_2$ mixing ratio (mol mol$^{-1}$)',ylabel='Relative humidity (%)\nat 500 hPa')
-
-
-  plt.tight_layout()
-  plt.savefig('glob_mean_cloud.pdf')
-  plt.close()
-
-
-do = 0
-if do:
-  fig, axes = plt.subplots(ncols=2,nrows=3,figsize=(7.5,7))
-
-  axes[0,0].plot(o2s[:-1],icwp[:-1],color='k',marker='.',linestyle='-')
-  axes[0,0].plot(o2s[-1],icwp[-1],color='k',marker='s',linestyle='-')
-  axes[0,0].set(xscale='log',ylabel='Ice cloud water path\n(kg m$^{-2}$)')
-
-  axes[1,0].plot(o2s[:-1],lcwp[:-1],color='k',marker='.',linestyle='-')
-  axes[1,0].plot(o2s[-1],lcwp[-1],color='k',marker='s',linestyle='-')
-  axes[1,0].set(xscale='log',ylabel='Liquid cloud water path\n(kg m$^{-2}$)')
-
-  axes[2,0].plot(o2s[:-1],cwp[:-1],color='k',marker='.',linestyle='-')
-  axes[2,0].plot(o2s[-1],cwp[-1],color='k',marker='s',linestyle='-')
-  axes[2,0].set(xscale='log',xlabel='Nominal O$_2$ mixing ratio (mol mol$^{-1}$)',ylabel='Total cloud water path\n(kg m$^{-2}$)')
-
-  axes[0,1].plot(o2s[:-1],cwp_high[:-1],color='k',marker='.',linestyle='-')
-  axes[0,1].plot(o2s[-1],cwp_high[-1],color='k',marker='s',linestyle='-')
-  axes[0,1].set(xscale='log',ylabel='High cloud water path\n(kg m$^{-2}$)')
-
-  axes[1,1].plot(o2s[:-1],cwp_med[:-1],color='k',marker='.',linestyle='-')
-  axes[1,1].plot(o2s[-1],cwp_med[-1],color='k',marker='s',linestyle='-')
-  axes[1,1].set(xscale='log',ylabel='Med cloud water path\n(kg m$^{-2}$)')
-
-  axes[2,1].plot(o2s[:-1],cwp_low[:-1],color='k',marker='.',linestyle='-')
-  axes[2,1].plot(o2s[-1],cwp_low[-1],color='k',marker='s',linestyle='-')
-  axes[2,1].set(xscale='log',xlabel='Nominal O$_2$ mixing ratio (mol mol$^{-1}$)',ylabel='Low cloud water path\n(kg m$^{-2}$)')
-
-  plt.tight_layout()
-  plt.savefig('glob_mean_cwp.pdf')
-  plt.close()
-
-#print(cwp)
-#print(cwp_low+cwp_med+cwp_high)
-
-
-fig, axes = plt.subplots(ncols=1,nrows=3,figsize=(5,7))
-ax = axes[0]
-ax.plot(o2s[:6],Ts[:6],color='k',marker='.',linestyle='--',label='Constant CO$_2$',lw=2)
-ax.plot(o2s[6:],Ts[6:],color='k',marker='.',linestyle='-',label='Temperature control')
-ax.set(xscale='log',ylabel='Global mean\nsurface temperature (K)',xlabel='Nominal O$_2$ level (mol mol$^{-1}$)',
-       ylim=(283,291))
-
-ax = axes[1]
-ax.plot(o2s[:6],eqTs[:6],color='r',marker='.',linestyle='--',label='Constant CO$_2$',lw=2)
-ax.plot(o2s[6:],eqTs[6:],color='r',marker='.',linestyle='-',label='Temperature control')
-ax.set(xscale='log',ylabel='Tropical mean\nsurface temperature (K)',xlabel='Nominal O$_2$ level (mol mol$^{-1}$)',
-       ylim=(295,303))
-
-ax = axes[2]
-ax.plot(o2s[:6],plTs[:6],color='b',marker='.',linestyle='--',label='Constant CO$_2$',lw=2)
-ax.plot(o2s[6:],plTs[6:],color='b',marker='.',linestyle='-',label='Temperature control')
-ax.set(xscale='log',ylabel='Polar mean\nsurface temperature (K)',xlabel='Nominal O$_2$ level (mol mol$^{-1}$)',
-       ylim=(252,260))
-
-plt.tight_layout()
-plt.savefig('glob_trop_pole_surfT.pdf')
-plt.close()
 
 
 #this will be the synthesis plot
@@ -505,7 +367,7 @@ ax.tick_params(direction='in')
 ax.set_xticks([1e-8,1e-6,1e-4,1e-2])
 ylims = ax.get_ylim()
 ax.set_ylim((0.5*(ylims[0]+ylims[1]-dy_crf),0.5*(ylims[0]+ylims[1]+dy_crf)))
-ax.invert_yaxis()
+#ax.invert_yaxis()
 
 ax = fig.add_subplot(row5[2])
 ax.plot(o2s[:6],lwcf[:6] + swcf[:6],color='k',marker='.',linestyle='--',lw=2)
@@ -515,7 +377,7 @@ ax.tick_params(direction='in')
 ax.set_xticks([1e-8,1e-6,1e-4,1e-2])
 ylims = ax.get_ylim()
 ax.set_ylim((0.5*(ylims[0]+ylims[1]-dy_crf),0.5*(ylims[0]+ylims[1]+dy_crf)))
-ax.invert_yaxis()
+#ax.invert_yaxis()
 
-plt.savefig('global_synth.pdf')
+plt.savefig('figures/fig01.pdf')
 plt.close()
