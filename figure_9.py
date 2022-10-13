@@ -1,17 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import netCDF4 as nc
-from mpl_toolkits.basemap import Basemap
-#from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.gridspec as gridspec
-#import pdb
-#import pathlib
 import scipy.integrate as intg
 
+#this just suppresses a deprecation warning from netCDF4
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-#simnames = ["o3_pal_avg_test","o3_proto2_test","o3_proto1_hiCO2","o3_after_goe_hiCO2","o3_during_goe_hiCO2","o3_pre_goe_hiCO2"]
 simnames = ["ref_const_O3",
             "const_CO2_O2_1e-2",
             "temp_cont_O2_1e-3",
@@ -47,7 +43,7 @@ g = 9.80665
 a = 6371000.
 
 for i in np.arange(len(simnames)):
-  simpath = simnames[i] + "/merged_hist"
+  simpath = "CAM_post_process/" + simnames[i]
   file = simpath + "/" + simnames[i] + ".cam.h0.zonmean_0031_0060.nc"
 
   data = nc.Dataset(file,'r')
@@ -55,14 +51,6 @@ for i in np.arange(len(simnames)):
   lats = data.variables['lat'][:]
   if i == 0:
     pal_fields = {}
-
-  file_tim = simpath + "/" + simnames[i] + ".cam.h0.timmean_0031_0060.nc"
-  data_tim = nc.Dataset(file_tim,'r')
-
-  p_int = data_tim.variables['ilev'][:].squeeze()*100.0
-  T = data.variables['T'][:].squeeze()
-  rho = p[:,None]*100 / (R * T)
-  dz = np.diff(p_int)[:,None] / (rho*g)
 
   for j in np.arange(len(fields)):
     if fields[j] == 'streamf':
@@ -85,7 +73,6 @@ for i in np.arange(len(simnames)):
         field -= pal_fields[fields[j]]
         cmaps = ['RdBu_r','RdBu_r','viridis_r','viridis_r']
         cranges = [np.arange(-3.5,4,0.5),np.linspace(-0.16,0.16,17),np.arange(-12,-3,1),np.arange(-12,-3,1)]
-#    print(fields[j],np.nanmin(field),np.nanmax(field))
 
     if i == 0:
       ax = fig.add_subplot(top_grid[j+4])

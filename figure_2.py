@@ -2,10 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import netCDF4 as nc
 import scipy.interpolate as si
-#from mpl_toolkits.basemap import Basemap
-#from mpl_toolkits.axes_grid1 import make_axes_locatable
-#import pdb
-#import pathlib
 import matplotlib.gridspec as gridspec
 
 #this just suppresses a deprecation warning from netCDF4
@@ -25,15 +21,6 @@ simnames =["const_CO2_O2_1e-9",
            "temp_cont_O2_1e-3",
            "const_CO2_O2_1e-2",
            "ref_const_O3"]
-#o2_title = ['Pre-GOE           ',
-#            'Start of GOE      ',
-#            'After GOE         ',
-#            'Proterozoic 1     ',
-#            'Proterozoic 2     ',
-#            'PAL (constant O3) ',
-#            'PAL (variable O3) ',
-#            'Start GOE (hiCO2) ']
-#fields = ['TS','LWCF','SWCF','CLDTOT','CLDHGH','CLDMED','CLDLOW','TGCLDCWP']
 
 #nominal O2 levels (use as x-axis)
 o2s = np.array([4.5545e-9,6.059e-8,7.255e-5,9.082e-4,9.941e-3,0.2112,4.5545e-9,6.059e-8,7.255e-5,9.082e-4,9.941e-3,0.2112])
@@ -48,31 +35,18 @@ rh20 = np.zeros(len(simnames))
 T20 = np.zeros(len(simnames))
 cldlow = np.zeros_like(Ts)
 cldhgh = np.zeros_like(Ts)
-#cldmed = np.zeros_like(Ts)
-#cwp = np.zeros_like(Ts)
 icwp = np.zeros_like(Ts)
 lcwp = np.zeros_like(Ts)
-#cwp_low = np.zeros_like(Ts)
-#cwp_med = np.zeros_like(Ts)
-#cwp_high = np.zeros_like(Ts)
 lwcf = np.zeros_like(Ts)
 swcf = np.zeros_like(Ts)
 icldt = np.zeros_like(Ts)
-#lcldt = np.zeros_like(Ts)
-#tcldt = np.zeros_like(Ts)
 icldp = np.zeros_like(Ts)
-#lcldp = np.zeros_like(Ts)
-#tcldp = np.zeros_like(Ts)
 lts = np.zeros_like(Ts)
 eis = np.zeros_like(Ts)
-#eis_frac = np.zeros_like(Ts)
 Ttroptrop = np.zeros_like(Ts)
 eqTs = np.zeros_like(Ts)
 plTs = np.zeros_like(Ts)
 
-#
-#R = 287.0
-#g = 9.80665
 
 for i in np.arange(len(simnames)):
   print(simnames[i])
@@ -90,9 +64,7 @@ for i in np.arange(len(simnames)):
   rh = data['RELHUM'][:].squeeze()
   q = data['Q'][:].squeeze()
   cldlow[i] = data['CLDLOW'][:].squeeze()
-  #cldmed[i] = data['CLDMED'][:].squeeze()
   cldhgh[i] = data['CLDHGH'][:].squeeze()
-#  cwp[i] = data['TGCLDCWP'][:].squeeze()
   lwcf[i] = data['LWCF'][:].squeeze()
   swcf[i] = data['SWCF'][:].squeeze()
   icwp[i] = data['TGCLDIWP'][:].squeeze()
@@ -114,32 +86,7 @@ for i in np.arange(len(simnames)):
 
   #read in cloud top data
   icldt[i] = data_cldt['ICLDT'][:].squeeze()
-  #lcldt[i] = data_cldt['LCLDT'][:].squeeze()
-  #tcldt[i] = data_cldt['TCLDT'][:].squeeze()
   icldp[i] = data_cldt['ICLDP'][:].squeeze()
-  #lcldp[i] = data_cldt['LCLDP'][:].squeeze()
-  #tcldp[i] = data_cldt['TCLDP'][:].squeeze()
-  #icldt[i] = data['ICLDT'][:].squeeze()
-  #lcldt[i] = data['LCLDT'][:].squeeze()
-  #tcldt[i] = data['TCLDT'][:].squeeze()
-  #icldp[i] = data['ICLDP'][:].squeeze()
-  #lcldp[i] = data['LCLDP'][:].squeeze()
-  #tcldp[i] = data['TCLDP'][:].squeeze()
-
-
-
-  #p_int = data_tim.variables['ilev'][:].squeeze()*100.0
-  #rho = p*100 / (R * T)
-  #dz = np.diff(p_int) / (rho*g)
-
-  #iwc = data['IWC'][:].squeeze()
-  #lwc = data['LWC'][:].squeeze()
-  #cwp_tmp = (iwc + lwc) * dz
-  #if 'ICLDTWP' in data.variables:
-   # pdb.set_trace()
-  #cwp_low[i] = np.sum(cwp_tmp[p>=700])
-  #cwp_med[i] = np.sum(cwp_tmp[np.logical_and(p<700,p>=400)])
-  #cwp_high[i] = np.sum(cwp_tmp[np.logical_and(p<400,p>=50)])
 
 
   #Tropical mean file--------------------------------
@@ -158,14 +105,6 @@ for i in np.arange(len(simnames)):
   data_npol = nc.Dataset(file_npol,'r')
   plTs[i] = 0.5*(data_spol['TS'][:].squeeze()+data_npol['TS'][:].squeeze())
 
-  #file_lts = simpath+ "/" + simnames[i] + ".cam.h0.globmean_0031_0060_lts.nc"
-  #data_lts = nc.Dataset(file_lts,'r')
-  #lts[i] = data_lts['LTS'][:].squeeze()
-
-  #file_eis = simpath+ "/" + simnames[i] + ".cam.h0.globmean_0031_0060_eis.nc"
-  #data_eis = nc.Dataset(file_eis,'r')
-  #eis[i] = data_eis['EIS'][:].squeeze()
-
 
   #Need a few things from time mean file-------------
   file_tim = simpath + "/" + simnames[i] + ".cam.h0.timmean_0031_0060.nc"
@@ -180,7 +119,6 @@ for i in np.arange(len(simnames)):
   lts_arr = data_lts['LTS'][:].squeeze()
   #Horizontal average over marine regions only
   lts[i] = np.sum((lts_arr*np.cos(lats*np.pi/180)[:,None]*(1-landfrac)))/np.sum(np.cos(lats*np.pi/180))/144
-  #lts[i] = data_lts['LTS'][:].squeeze()
 
 
   #EIS file---------------------------------------
@@ -189,10 +127,6 @@ for i in np.arange(len(simnames)):
   eis_arr = data_eis['EIS'][:].squeeze()
   #Horizontal average over marine regions and EIS>0 only
   eis[i] = np.sum((eis_arr*np.cos(lats*np.pi/180)[:,None]*(1-landfrac))[eis_arr>0])/np.sum(np.cos(lats*np.pi/180))/144
-  #eis[i] = data_eis['EIS'][:].squeeze()
-  #pdb.set_trace()
-
-  #eis_frac[i] = np.sum(((1-landfrac)*np.cos(lats[:,None]*np.pi/180))[eis_arr>0])/np.sum((1-landfrac)*np.cos(lats[:,None]*np.pi/180))
 
 
 #this will be the synthesis plot
@@ -368,5 +302,5 @@ ax.set_xticks([1e-8,1e-6,1e-4,1e-2])
 ylims = ax.get_ylim()
 ax.set_ylim((0.5*(ylims[0]+ylims[1]-dy_crf),0.5*(ylims[0]+ylims[1]+dy_crf)))
 
-plt.savefig('figures/fig01.pdf')
+plt.savefig('figures/fig02.pdf')
 plt.close()

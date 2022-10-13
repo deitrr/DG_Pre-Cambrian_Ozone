@@ -9,6 +9,8 @@ import netCDF4 as nc
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
+path_to_archive = 'DG_Pre-Cambrian_O3_archive/CAM_input/'
+
 #simnames =["o3_pre_goe_hiCO2","o3_during_goe_hiCO2",
 #           "o3_after_goe_hiCO2","o3_proto1_hiCO2","o3_proto2_test",
 #           "o3_pre_goe_test","O3_during_goe_test","o3_after_goe_test","o3_proto1_test",
@@ -64,7 +66,7 @@ for i in np.arange(len(simnames)):
   rh = np.squeeze(data.variables['RELHUM'][:])
 
   #compute pressure levels using average surface pressure
-  data_ic = nc.Dataset("cami-mam3_0000-01-01_1.9x2.5_L30_c090306.nc")
+  data_ic = nc.Dataset(path_to_archive + 'cami-mam3_0000-01-01_1.9x2.5_L30_c090306.nc')
   p = (data_ic['hyam'][:]*data_ic['P0'][:] + data_ic['hybm'][:]*data['PS'][:]).squeeze()/100
 
   #if simnames[i] == "o3_pal_avg_test":

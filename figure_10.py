@@ -1,13 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import netCDF4 as nc
-#from mpl_toolkits.basemap import Basemap
 import matplotlib.gridspec as gridspec
-#from mpl_toolkits.axes_grid1 import make_axes_locatable
-#import pdb
-#import pathlib
 
-#simnames = ["o3_pal_avg_test","o3_proto2_test","o3_proto1_hiCO2","o3_after_goe_hiCO2","o3_during_goe_hiCO2","o3_pre_goe_hiCO2"]
+#this just suppresses a deprecation warning from netCDF4
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 simnames = ["ref_const_O3",
             "const_CO2_O2_1e-2",
             "temp_cont_O2_1e-3",
@@ -21,7 +20,7 @@ o2_title = ['Nominal O$_2=$ PAL',
             'Nominal O$_2=10^{-4}$',
             'Nominal O$_2=10^{-7}$',
             'Nominal O$_2=10^{-9}$']
-#fields = ['T','U']
+
 cname = ['Zonal velocity (m s$^{-1}$), GCM','Zonal velocity (m s$^{-1}$), thermal wind approximation']
 cmaps = ['RdBu_r','RdBu_r']
 cranges = [np.arange(-60,65,5),np.arange(-60,65,5)]
@@ -61,8 +60,6 @@ for i in np.arange(len(simnames)):
     dTdy = np.gradient(0.5*(T[ilev,:]+T[ilev+1,:]),y)
     u[ilev,:] = u[ilev+1,:] + R/f * dTdy * dlnp[ilev]
 
-#  dTavdy = np.gradient(Tav,y)
-#  print(u_ref[12,13],dTavdy[13],u_ref[12,13]+R/f[13]*dTavdy[13]*np.log(p[0]/p[12]))
 
   for j in np.arange(2):
     if j == 0:
@@ -72,7 +69,7 @@ for i in np.arange(len(simnames)):
 
     ax = fig.add_subplot(bot_grid[2*i+j+2])
 
-    c = ax.contourf(lats, p, np.squeeze(field), cranges[j], cmap=cmaps[j], rasterized=True) 
+    c = ax.contourf(lats, p, np.squeeze(field), cranges[j], cmap=cmaps[j])
     for cc in c.collections:
       cc.set_edgecolor("face")
     ax.invert_yaxis()
