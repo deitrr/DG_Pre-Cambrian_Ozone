@@ -33,7 +33,7 @@ start_year = 31
 end_year = 60
 
 #define the fields we need time mean and global files
-fields_select = '-select,name=TS,cb_ozone_c,RELHUM,Q,CLDLOW,CLDHGH,LWCF,SWCF,TGCLDIWP,TGCLDLWP,LANDFRAC,IWC,LWC,T,CLOUD,U,V,ilev,CLDICE,PS '
+fields_select = '-select,name=TS,cb_ozone_c,RELHUM,Q,CLDLOW,CLDHGH,LWCF,SWCF,TGCLDIWP,TGCLDLWP,LANDFRAC,IWC,LWC,T,CLOUD,U,V,ilev,CLDICE,PS,ozone '
 
 
 for sim in sim_list:
