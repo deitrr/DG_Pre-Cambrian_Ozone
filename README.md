@@ -39,5 +39,5 @@ where "x" is the figure number. Some of them (figure_1.py, figure_require data f
 
 ## Credits
 
-Much of the post-processing is done using the [Python implementation of CDO]{https://code.mpimet.mpg.de/projects/cdo/wiki/Cdo%7Brbpy%7D}
+Much of the post-processing is done using the [Python implementation of CDO](https://code.mpimet.mpg.de/projects/cdo/wiki/Cdo%7Brbpy%7D)
 
