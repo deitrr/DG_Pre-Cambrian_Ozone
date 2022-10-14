@@ -35,4 +35,9 @@ Each figure script in the main directory can be run with
 ```
 $ python figure_x.py
 ```
-where "x" is the figure number. Some of them require data from DG_Pre-Cambrian_O3_archive/CAM_input/, so you will need to edit those scripts with the correct path to the simulation archive. 
+where "x" is the figure number. Some of them (figure_1.py, figure_require data from DG_Pre-Cambrian_O3_archive/CAM_input/, so you will need to edit those scripts with the correct path to the simulation archive. 
+
+## Credits
+
+Much of the post-processing is done using the [Python implementation of CDO]{https://code.mpimet.mpg.de/projects/cdo/wiki/Cdo%7Brbpy%7D}
+
