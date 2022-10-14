@@ -35,7 +35,7 @@ Each figure script in the main directory can be run with
 ```
 $ python figure_x.py
 ```
-where "x" is the figure number. Some of them (figure_1.py, figure_require data from DG_Pre-Cambrian_O3_archive/CAM_input/, so you will need to edit those scripts with the correct path to the simulation archive. 
+where "x" is the figure number. Some of them (figure_1.py, figure_3.py, and figure_5_to_7.py) require data from DG_Pre-Cambrian_O3_archive/CAM_input/, so you will need to edit those scripts with the correct path to the simulation archive. 
 
 ## Credits
 
@@ -44,3 +44,5 @@ Much of the post-processing is done using the [Python implementation of CDO](htt
 The Eulerian mean-stream function is calculated using Equation 1 of [Pauluis et al. 2008](https://doi.org/10.1126/science.1159649).
 
 The LTS and EIS are calculated using definitions in [Wood & Bretherton 2006](https://doi.org/10.1175/JCLI3988.1). The EIS is dependent on the height of the LCL. For this we use Equation 24 of [Lawrence 2005](https://doi.org/10.1175/BAMS-86-2-225).
+
+The Python package `climt` is described in [Monteiro et al. 2018](https://doi.org/10.5194/gmd-11-3781-2018, 2018). Documentation is available [here](https://github.com/CliMT/climt) and [here](https://climt.readthedocs.io/en/latest/). Documentation specifically for RRTMG is [here](http://rtweb.aer.com/rrtm_frame.html).
