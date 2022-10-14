@@ -9,7 +9,7 @@ This code requires Python 3 as well as the following Python libraries: numpy, sc
 
 ### Note about installing climt in Mac OS
 
-Depending on the subversion of Python 3, installing via `pip install climt` often fails. I've found that I need to install and set the paths of GCC and GFortran explicitly, like so:
+Depending on the subversion of Python 3, installing via `pip install climt` often fails. I've found that I need to install and set the definitions of GCC and GFortran explicitly, like so:
 ```
 $ brew install gcc
 $ export CC=gcc-x
