@@ -19,15 +19,15 @@ where you replace the "x" with whatever version number of gcc brew installs. The
 
 ## Post-processing the simulation output
 
-First, make sure you have downloaded the repository of simulation output (above). Make note of the path where this is located. The directory DG_Pre-Cambrian_O3_archive contains two sub-directories, CAM_input and CAM_output. The former contains files used to define the ozone in CAM and the initial condition file, which is only included here for plotting purposes. CAM_output contains all simulation output related to the atmosphere for years 31-60, in merged netCDF4 files. These are organized in sub-directories with each simulation name. This output data needs to be averaged and post-processed in a number of ways to be useful for plotting.
+First, make sure you have downloaded the repository of simulation output (above). Make note of the path where this is located. The directory "DG_Pre-Cambrian_O3_archive" contains two sub-directories, "CAM_input" and "CAM_output". The former contains files used to define the ozone in CAM and the initial condition file, which is only included here for plotting purposes. "CAM_output" contains all simulation output related to the atmosphere for years 31-60, in merged netCDF4 files. These are organized in sub-directories with each simulation name. This output data needs to be averaged and post-processed in a number of ways to be useful for plotting.
 
-Navigate to the directory CAM_post_process. The post-processing is done using the script `post_process.py`:
+Navigate to the directory "CAM_post_process". The post-processing is done using the script `post_process.py`:
 ```
 $ python post_process.py <path_to_archive>/DG_Pre-Cambrian_O3_archive/CAM_output
 ```
-This will process all simulations in the CAM_output directory (make sure there are no other files in this directory!). This will take a few hours to run. If the process gets interrupted, you can re-run post_process.py the same way as above and it will detect the existing post-processed files and skip them. You can also run the script for only one simulation by adding the option `-s <simulation_name>`. Use the `-w` option to overwrite all the post-processed outputs, if needed.
+This will process all simulations in the "CAM_output" directory (make sure there are no other files in this directory!). This will take a few hours to run. If the process gets interrupted, you can re-run post_process.py the same way as above and it will detect the existing post-processed files and skip them. You can also run the script for only one simulation by adding the option `-s <simulation_name>`. Use the `-w` option to overwrite all the post-processed outputs, if needed.
 
-post_process.py will output post-processed files in sub-directories with the simulation name within directory you execute it from (CAM_post_process, most likely). The total size of all of these files is about 500 MB. 
+`post_process.py` will output post-processed files in sub-directories with the simulation name within directory you execute it from ("CAM_post_process", most likely). The total size of all of these files is about 500 MB. 
 
 ## Plotting 
 
@@ -35,7 +35,7 @@ Each figure script in the main directory can be run with
 ```
 $ python figure_x.py
 ```
-where "x" is the figure number. Some of them (figure_1.py, figure_3.py, and figure_5_to_7.py) require data from DG_Pre-Cambrian_O3_archive/CAM_input/, so you will need to edit those scripts with the correct path to the simulation archive. 
+where "x" is the figure number. Some of them (`figure_1.py`, `figure_3.py`, and `figure_5_to_7.py`) require data from "DG_Pre-Cambrian_O3_archive/CAM_input/", so you will need to edit those scripts with the correct path to the simulation archive. 
 
 ## Credits
 
