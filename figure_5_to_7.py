@@ -6,7 +6,7 @@ from matplotlib import rcParams
 plt.rcParams.update({'font.size':8})
 
 path_to_archive = "DG_Pre-Cambrian_O3_archive/CAM_input/"
-cesm_dir = 'CAM_post_process/cesm_profs'
+cesm_dir = 'CAM_post_process/'
 
 cesm_names = ["const_CO2_O2_1e-9",
               "const_CO2_O2_1e-7",
@@ -22,6 +22,7 @@ fields = ['lev','TS','T','Q','ozone']
 global_profs = []
 for i in np.arange(len(cesm_names)):
     data = nc.Dataset(cesm_dir+cesm_names[i]+'/'+cesm_names[i]+'.cam.h0.globmean_0031_0060.nc','r')
+
     dtmp = {}
     dtmp['name'] = cesm_names[i]
     for f in fields:
