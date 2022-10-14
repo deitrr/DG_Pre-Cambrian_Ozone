@@ -39,5 +39,8 @@ where "x" is the figure number. Some of them (figure_1.py, figure_require data f
 
 ## Credits
 
-Much of the post-processing is done using the [Python implementation of CDO](https://code.mpimet.mpg.de/projects/cdo/wiki/Cdo%7Brbpy%7D)
+Much of the post-processing is done using the [Python implementation of CDO](https://code.mpimet.mpg.de/projects/cdo/wiki/Cdo%7Brbpy%7D).
 
+The Eulerian mean-stream function is calculated using Equation 1 of [Pauluis et al. 2008](https://doi.org/10.1126/science.1159649).
+
+The LTS and EIS are calculated using definitions in [Wood & Bretherton 2006](https://doi.org/10.1175/JCLI3988.1). The EIS is dependent on the height of the LCL. For this we use Equation 24 of [Lawrence 2005](https://doi.org/10.1175/BAMS-86-2-225).
