@@ -2,7 +2,7 @@
 
 
 # DG_Pre-Cambrian_Ozone
-Scripts for plots and analysis of Deitrick &amp; Goldblatt pre-Cambrian ozone paper (I'll update this paper info when the paper is published)
+Scripts for plots and analysis of Deitrick &amp; Goldblatt pre-Cambrian ozone paper [https://doi.org/10.5194/cp-19-1201-2023](https://doi.org/10.5194/cp-19-1201-2023)
 
 The simulation output necessary to plot all figures is located here: [(https://doi.org/10.20383/103.0648)](https://doi.org/10.20383/103.0648)
 
